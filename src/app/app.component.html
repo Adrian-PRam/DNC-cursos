@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    
+
+    <div class="title_box">
+        <mat-icon class="title_icon">calendar_today</mat-icon>
+        <h1>DNC Cursos</h1>
+    </div>
+
+    <div class="box1">
+        <h2>Cursos Registrados</h2>
+        <button class="button" (click)="openModal()">AGREGAR</button>
+    </div>
+
+    <div class="box2">
+        
+        <div class="estatus">
+            <h3>ESTATUS:    </h3>
+            <mat-form-field appearance="fill">
+                <mat-label >Selecciona estatus</mat-label>
+                <mat-select [(value)]="selectedEstatus">
+                    <mat-option value="todos">Todos</mat-option>
+                    <mat-option value="rechazados">Rechazados</mat-option>
+                    <mat-option value="aprobados">Aprobados</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
+        <div class="estatus">
+            <h3>TIPO:</h3>
+            <mat-form-field appearance="fill">
+                <mat-label >Selecciona tipo</mat-label>
+                <mat-select [(value)]="selectedTipo">
+                    <mat-option value="Todos">Todos</mat-option>
+                    <mat-option value="Curso">Curso</mat-option>
+                    <mat-option value="Viaje">Viaje</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        
+        <div class="table-container">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Nombre de Curso</th>
+                        <th>Tipo</th>
+                        <th>Integrantes</th>
+                        <th>Fecha</th>
+                        <th>Costo</th>
+                        <th>Rechazar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Curso de html</td>
+                        <td>Curso</td>
+                        <td>15</td>
+                        <td>08/23/24</td>
+                        <td>$40,000</td>
+                        <td class="image"><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="cancel" class="cancel-icon"></mat-icon></td>
+                    </tr>
+                    
+                    
+                    <tr *ngFor="let entry of entries; let i = index">
+                        <td>{{ entry.nombre }}</td>
+                        <td>{{ entry.tipo }}</td>
+                        <td>{{ entry.integrantes }}</td>
+                        <td>{{ entry.fecha | date: 'MM/dd/yy' }}</td>
+                        <td>{{ entry.costo }}</td>
+                        <td class="image">
+                          <mat-icon class="cancel-icon" (click)="removeEntry(entry)">cancel</mat-icon>
+                        </td>
+                      </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @if(isModalOpen){
+
+    <div class="modal">
+    <div class="modal-content">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <form #dataForm="ngForm" (ngSubmit)="onSubmit(dataForm)">
+        
+    <p class="modal_subtitle">Nombre de Curso:</p>
+    <input type="text" class="text_box" placeholder="Ingresa el nombre" [(ngModel)]="nombre" name="nombre" required>
+
+
+
+    <p class="modal_subtitle">Tipo:</p>
+    <select class="option_box2" [(ngModel)]="tipo" name="tipo" required>
+        <option>Curso</option>
+        <option>Viaje</option>
+    </select>
+
+    <div class="div_integrantes">
+    <p class="modal_subtitle">Integrantes:</p>
+    <input type="text" class="integrantes" placeholder="Ingresa los integrantes" [(ngModel)]="integrante" name="integrante" required>
+    <button class="button_integrante" (click)="agregarIntegrante()">AGREGAR</button>
+    <button class="button_integrante" (click)="quitarIntegrante()">QUITAR</button>
+
+    </div>
+
+
+    <p class="modal_subtitle">Fecha:</p>
+    <input type="date" class="text_box" [(ngModel)]="fecha" name="fecha" required>
+
+    <p class="modal_subtitle">Costo:</p>
+    <input type="text" class="text_box" placeholder="Ingresa el costo" [(ngModel)]="costo" name="costo" required>
+
+    <br>
+
+    <div class="centered-div">
+        <button type="submit" class="button_insertar_modal">GUARDAR</button>
+    </div>
+</form>
+</div>
+</div>
+
+    }
+
+
+
+    
+
+
+
+    
+</body>
+</html>
