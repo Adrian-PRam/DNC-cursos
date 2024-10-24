@@ -6,8 +6,8 @@
     <title>Document</title>
 </head>
 <body>
-    
-    
+
+
 
     <div class="title_box">
         <mat-icon class="title_icon">calendar_today</mat-icon>
@@ -20,7 +20,7 @@
     </div>
 
     <div class="box2">
-        
+
         <div class="estatus">
             <h3>ESTATUS:    </h3>
             <mat-form-field appearance="fill">
@@ -44,7 +44,12 @@
                 </mat-select>
             </mat-form-field>
         </div>
-        
+
+        @defer {
+          <app-cursos-registrados></app-cursos-registrados>
+        } @loading {
+          <mat-progress-spinner></mat-progress-spinner>
+        }
         <div class="table-container">
             <table id="dataTable">
                 <thead>
@@ -66,8 +71,8 @@
                         <td>$40,000</td>
                         <td class="image"><mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="cancel" class="cancel-icon"></mat-icon></td>
                     </tr>
-                    
-                    
+
+
                     <tr *ngFor="let entry of entries; let i = index">
                         <td>{{ entry.nombre }}</td>
                         <td>{{ entry.tipo }}</td>
@@ -89,7 +94,7 @@
     <div class="modal-content">
     <span class="close" (click)="closeModal()">&times;</span>
     <form #dataForm="ngForm" (ngSubmit)="onSubmit(dataForm)">
-        
+
     <p class="modal_subtitle">Nombre de Curso:</p>
     <input type="text" class="text_box" placeholder="Ingresa el nombre" [(ngModel)]="nombre" name="nombre" required>
 
@@ -129,10 +134,10 @@
 
 
 
-    
 
 
 
-    
+
+
 </body>
 </html>

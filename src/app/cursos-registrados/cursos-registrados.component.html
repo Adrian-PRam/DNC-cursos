@@ -1,0 +1,48 @@
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="cursosRegistrados">
+    <ng-container matColumnDef="nombreCurso">
+      <th mat-header-cell *matHeaderCellDef>Nombre de Curso</th>
+      <td mat-cell *matCellDef="let curso"> {{ curso.nombreCurso }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="tipo">
+      <th mat-header-cell *matHeaderCellDef>Tipo</th>
+      <td mat-cell *matCellDef="let curso"> {{ curso.tipo }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="integrantes">
+      <th mat-header-cell *matHeaderCellDef>Integrantes</th>
+      <td mat-cell *matCellDef="let curso"> {{ curso.integrantes }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="fecha">
+      <th mat-header-cell *matHeaderCellDef>Fecha</th>
+      <td mat-cell *matCellDef="let curso"> {{ curso.fecha | date:'medium' }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="costo">
+      <th mat-header-cell *matHeaderCellDef>Costo</th>
+      <td mat-cell *matCellDef="let curso"> {{ curso.costo | currency:'MXN' }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <th mat-header-cell *matHeaderCellDef>Rechazar</th>
+      <td mat-cell *matCellDef="let curso">
+        <button
+          mat-icon-button
+          aria-label="Botón para remover un curso de la tabla."
+          (click)="rechazaCurso(curso)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnasTabla"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnasTabla;"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+    showFirstLastButtons
+    aria-label="Selecciona una página de la tabla de cursos registrados.">
+  </mat-paginator>
+</div>

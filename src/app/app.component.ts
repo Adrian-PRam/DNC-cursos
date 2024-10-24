@@ -1,22 +1,29 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import {MatIconModule} from '@angular/material/icon'; 
-import {MatMenuModule} from '@angular/material/menu'; 
-import {MatSelectModule} from '@angular/material/select'; 
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
+import { CursosRegistradosComponent } from './cursos-registrados/cursos-registrados.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, 
-            FormsModule, 
-            MatIconModule,
-            MatMenuModule,
-            MatSelectModule,
-            CommonModule], 
+  imports: [
+    RouterOutlet,
+    FormsModule,
+    MatIconModule,
+    MatMenuModule,
+    MatSelectModule,
+    CommonModule,
+    CursosRegistradosComponent,
+    MatProgressSpinnerModule,
+  ],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
   title: string = 'mi-primer-proyecto';
@@ -28,14 +35,19 @@ export class AppComponent {
 
   nombre: string = '';
   tipo: string = '';
-  integrante: string = '';  
+  integrante: string = '';
   fecha: Date | null = null;
   costo: string = '';
 
- 
-  integrantesList: string[] = []; 
+  integrantesList: string[] = [];
 
-  entries: { nombre: string; tipo: string; integrantes: number; fecha: Date; costo: string }[] = [];
+  entries: {
+    nombre: string;
+    tipo: string;
+    integrantes: number;
+    fecha: Date;
+    costo: string;
+  }[] = [];
 
   openModal() {
     this.isModalOpen = true;
@@ -52,33 +64,36 @@ export class AppComponent {
     }
   }
 
-  
   agregarIntegrante() {
     if (this.integrante) {
-      this.integrantesList.push(this.integrante);  
-      this.integrante = ''; 
+      this.integrantesList.push(this.integrante);
+      this.integrante = '';
     }
   }
 
- 
   quitarIntegrante() {
-    this.integrantesList.pop();  
+    this.integrantesList.pop();
   }
 
   onSubmit(dataForm: any): void {
-    if (this.nombre && this.tipo && this.integrantesList.length > 0 && this.fecha && this.costo) {
+    if (
+      this.nombre &&
+      this.tipo &&
+      this.integrantesList.length > 0 &&
+      this.fecha &&
+      this.costo
+    ) {
       this.entries.push({
         nombre: this.nombre,
         tipo: this.tipo,
-        integrantes: this.integrantesList.length,  
+        integrantes: this.integrantesList.length,
         fecha: this.fecha,
-        costo: this.costo
+        costo: this.costo,
       });
-
 
       this.nombre = '';
       this.tipo = '';
-      this.integrantesList = [];  
+      this.integrantesList = [];
       this.fecha = null;
       this.costo = '';
 
@@ -86,4 +101,3 @@ export class AppComponent {
     }
   }
 }
-
