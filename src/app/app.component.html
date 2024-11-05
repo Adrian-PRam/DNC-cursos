@@ -37,9 +37,9 @@
           <mat-form-field appearance="fill">
             <mat-label>Selecciona tipo</mat-label>
             <mat-select [(value)]="selectedTipo">
-              <mat-option value="Todos">Todos</mat-option>
-              <mat-option value="Curso">Curso</mat-option>
-              <mat-option value="Viaje">Viaje</mat-option>
+              @for (tipo of catalogosTipo; track tipo.idTipoRegistro) {
+                <mat-option [value]="tipo.idTipoRegistro">{{tipo.TipoRegistro}}</mat-option>
+              }
             </mat-select>
           </mat-form-field>
         </div>

@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,6 +15,10 @@ import {MatInputModule} from '@angular/material/input';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {provideNativeDateAdapter} from '@angular/material/core';
+
+//services
+import { CatalogosService } from './shared/services/catalogos.service';
+import { CatalogoTipo } from './shared/models/catalogo-tipo.model';
 
 @Component({
   selector: 'app-root',
@@ -47,6 +51,10 @@ import {provideNativeDateAdapter} from '@angular/material/core';
 
 
 export class AppComponent implements AfterViewInit{
+
+  //injects
+  #catalogosService = inject(CatalogosService);
+
   title: string = 'mi-primer-proyecto';
   selectedEstatus: string = 'todos';
   selectedTipo: string = 'Todos';
@@ -54,6 +62,10 @@ export class AppComponent implements AfterViewInit{
 
   displayedColumns: string[] = ['nombre', 'tipo', 'integrantes', 'fecha', 'costo', 'rechazar'];
   dataSource = new MatTableDataSource<any>([]);
+
+
+  //
+  catalogosTipo: CatalogoTipo[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -72,8 +84,14 @@ export class AppComponent implements AfterViewInit{
     }
   }
 
+
+
   quitarIntegrante() {
     this.integrantesList.pop();
+  }
+
+  ngOnInit():void {
+    this.obtenerCatalogo();
   }
 
   ngAfterViewInit() {
@@ -115,4 +133,24 @@ export class AppComponent implements AfterViewInit{
       this.closeModal();
     }
   }
+
+  /**
+   * Obtiene el catalogo de tipo....
+   * @return Respuesta de la API
+   */
+  public obtenerCatalogo(): void {
+
+    const fetchCatalogos = this.#catalogosService.Catalogos_TipoDNC({}).subscribe({
+      next: (response => {
+        if (response) {
+          this.catalogosTipo = response;
+        }
+      }),
+      error: (error)=> {
+        console.error(error);
+      }
+    })
+  }
+
+ 
 }
