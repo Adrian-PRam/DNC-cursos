@@ -6,7 +6,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { CursosRegistradosComponent } from './cursos-registrados/cursos-registrados.component';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -15,10 +14,13 @@ import {MatInputModule} from '@angular/material/input';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {provideNativeDateAdapter} from '@angular/material/core';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatButtonModule} from '@angular/material/button';
 
 //services
 import { CatalogosService } from './shared/services/catalogos.service';
 import { CatalogoTipo } from './shared/models/catalogo-tipo.model';
+import { CatalogoNecesidad } from './shared/models/catalogo-necesidad.model';
 
 @Component({
   selector: 'app-root',
@@ -32,7 +34,6 @@ import { CatalogoTipo } from './shared/models/catalogo-tipo.model';
     MatMenuModule,
     MatSelectModule,
     CommonModule,
-    CursosRegistradosComponent,
     MatProgressSpinnerModule,
     MatTableModule,
     MatPaginator, 
@@ -41,7 +42,8 @@ import { CatalogoTipo } from './shared/models/catalogo-tipo.model';
     CurrencyPipe, 
     DatePipe,
     MatDatepickerModule,
-
+    MatDividerModule,
+    MatButtonModule,
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
@@ -60,19 +62,22 @@ export class AppComponent implements AfterViewInit{
   selectedTipo: string = 'Todos';
   isModalOpen: boolean = false;
 
-  displayedColumns: string[] = ['nombre', 'tipo', 'integrantes', 'fecha', 'costo', 'rechazar'];
+  displayedColumns: string[] = ['nombre', 'justificacion', 'tipo', 'integrantes', 'fecha','duracion', 'costo', 'rechazar'];
   dataSource = new MatTableDataSource<any>([]);
 
 
   //
   catalogosTipo: CatalogoTipo[] = [];
+  catalogosNecesidad: CatalogoNecesidad[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   nombre: string = '';
+  justificacion: string = '';
   tipo: string = '';
   integrante: string = '';
   fecha: Date | null = null;
+  duracion: string = '';
   costo: string = '';
 
   integrantesList: string[] = [];
@@ -112,12 +117,15 @@ export class AppComponent implements AfterViewInit{
   }
 
   onSubmit(dataForm: any): void {
-    if (this.nombre && this.tipo && this.integrantesList.length > 0 && this.fecha && this.costo) {
+    if (this.duracion && this.nombre && this.justificacion && this.tipo && this.integrantesList.length > 0 && this.fecha && this.costo) {
       const newEntry = {
         nombre: this.nombre,
+        justificacion: this.justificacion,
         tipo: this.tipo,
-        integrantes: this.integrantesList.length,
+        integrantes: [...this.integrantesList], 
+        showIntegrantes: false, 
         fecha: this.fecha,
+        duracion: this.duracion,
         costo: this.costo,
       };
 
@@ -126,12 +134,18 @@ export class AppComponent implements AfterViewInit{
       this.dataSource.data = [...currentData, newEntry];
 
       this.nombre = '';
+      this.justificacion = '';
       this.tipo = '';
       this.integrantesList = [];
       this.fecha = null;
+      this.duracion = '';
       this.costo = '';
       this.closeModal();
     }
+  }
+
+  toggleIntegrantes(entry: any): void {
+    entry.showIntegrantes = !entry.showIntegrantes; 
   }
 
   /**
@@ -139,18 +153,33 @@ export class AppComponent implements AfterViewInit{
    * @return Respuesta de la API
    */
   public obtenerCatalogo(): void {
-
-    const fetchCatalogos = this.#catalogosService.Catalogos_TipoDNC({}).subscribe({
-      next: (response => {
+    this.#catalogosService.Catalogos_TipoDNC({}).subscribe({
+      next: (response) => {
         if (response) {
           this.catalogosTipo = response;
         }
-      }),
-      error: (error)=> {
-        console.error(error);
+      },
+      error: (error) => {
+        console.error('Error fetching Catalogos_TipoDNC:', error);
       }
-    })
+    });
+
+    this.#catalogosService.Catalogos_NecesidadDNC({}).subscribe({
+      next: (response) => {
+        if (response) {
+          this.catalogosNecesidad = response;
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching Catalogos_NecesidadDNC:', error);
+      }
+    });
+}
   }
 
+    
+
+
+
+
  
-}

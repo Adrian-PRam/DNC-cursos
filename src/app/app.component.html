@@ -16,7 +16,7 @@
       
       <div class="box1">
         <h2>Cursos Registrados</h2>
-        <button class="button" (click)="openModal()">AGREGAR</button>
+        <button class="button" mat-raised-button (click)="openModal()">AGREGAR</button>
       </div>
       
       <div class="box2">
@@ -42,6 +42,8 @@
               }
             </mat-select>
           </mat-form-field>
+
+          
         </div>
 
         
@@ -52,17 +54,35 @@
                 <th mat-header-cell *matHeaderCellDef> Nombre de Curso </th>
                 <td mat-cell *matCellDef="let entry"> {{ entry.nombre }} </td>
               </ng-container>
+              <ng-container matColumnDef="justificacion">
+                <th mat-header-cell *matHeaderCellDef> Justificacion </th>
+                <td mat-cell *matCellDef="let entry"> {{ entry.justificacion }} </td>
+              </ng-container>
               <ng-container matColumnDef="tipo">
                 <th mat-header-cell *matHeaderCellDef> Tipo </th>
                 <td mat-cell *matCellDef="let entry"> {{ entry.tipo }} </td>
               </ng-container>
               <ng-container matColumnDef="integrantes">
                 <th mat-header-cell *matHeaderCellDef> Integrantes </th>
-                <td mat-cell *matCellDef="let entry"> {{ entry.integrantes }} </td>
-              </ng-container>
+                <td mat-cell *matCellDef="let entry">
+                  {{ entry.integrantes.length }}
+                  <button mat-icon-button (click)="toggleIntegrantes(entry)">
+                    <mat-icon>info</mat-icon>
+                  </button>
+                  <div *ngIf="entry.showIntegrantes" class="integrantes-list">
+                    <ul>
+                      <li *ngFor="let integrante of entry.integrantes">{{ integrante }}</li>
+                    </ul>
+                  </div>
+                </td>
+              </ng-container>              
               <ng-container matColumnDef="fecha">
                 <th mat-header-cell *matHeaderCellDef> Fecha </th>
                 <td mat-cell *matCellDef="let entry"> {{ entry.fecha  | date:'medium' }} </td>
+              </ng-container>
+              <ng-container matColumnDef="duracion">
+                <th mat-header-cell *matHeaderCellDef> Duracion </th>
+                <td mat-cell *matCellDef="let entry"> {{ entry.duracion }} </td>
               </ng-container>
               <ng-container matColumnDef="costo">
                 <th mat-header-cell *matHeaderCellDef> Costo </th>
@@ -100,13 +120,20 @@
                   <mat-label>Ingresa el nombre</mat-label>
                   <input matInput [(ngModel)]="nombre" name="nombre" required>
                 </mat-form-field>
-      
+
+                <p class="modal_subtitle">Justificacion del curso:</p>
+                <mat-form-field class="just_text">
+                  <mat-label>Escribe la justificacion</mat-label>
+                  <input matInput [(ngModel)]="justificacion" name="justificacion" required>
+                </mat-form-field>
               <p class="modal_subtitle">Tipo:</p>
               <mat-form-field appearance="fill">
                 <mat-label>Selecciona tipo</mat-label>
+                
                 <mat-select [(ngModel)]="tipo" name="tipo" required>
-                  <mat-option value="Curso">Curso</mat-option>
-                  <mat-option value="Viaje">Viaje</mat-option>
+                  @for (tipo of catalogosTipo; track tipo.idTipoRegistro) {
+                    <mat-option [value]="tipo.TipoRegistro">{{tipo.TipoRegistro}}</mat-option>
+                  }
                 </mat-select>
               </mat-form-field>
       
@@ -116,8 +143,8 @@
                     <mat-label>Ingresa los integrantes</mat-label>
                     <input matInput [(ngModel)]="integrante" name="integrante" required>
                   </mat-form-field>
-                <button class="button_integrante" type="button" (click)="agregarIntegrante()">AGREGAR</button>
-                <button class="button_integrante" type="button" (click)="quitarIntegrante()">QUITAR</button>
+                <button class="button_integrante" type="button" mat-raised-button (click)="agregarIntegrante()">AGREGAR</button>
+                <button class="button_integrante" type="button" mat-raised-button (click)="quitarIntegrante()">QUITAR</button>
               </div>
       
               <p class="modal_subtitle">Fecha:</p>
@@ -127,6 +154,12 @@
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
               </mat-form-field>
+
+              <p class="modal_subtitle">Duracion:</p>
+                <mat-form-field>
+                  <mat-label>Ingresa la duracion</mat-label>
+                  <input matInput [(ngModel)]="duracion" name="duracion" required>
+                </mat-form-field>
               
               <p class="modal_subtitle">Costo:</p>
               <mat-form-field>
@@ -135,7 +168,7 @@
               </mat-form-field>
       
               <div class="centered-div">
-                <button type="submit" class="button_insertar_modal">GUARDAR</button>
+                <button type="submit" mat-raised-button class="button_insertar_modal">GUARDAR</button>
               </div>
             </form>
           </div>

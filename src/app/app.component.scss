@@ -1,210 +1,212 @@
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.title_box {
+  background-color: #ff5c04;
+  height: 100px;
+  width: 100vw;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  align-items: center;
+  display: flex;
+}
+
+.box1 {
+  width: 85vw;
+  background-color: white;
+  border: 4px solid rgb(228, 228, 228);
+  padding: 20px;
+  margin: auto;
+  display: flex;
+  padding-top: 20px;
+  margin-top: 30px;
+  position: relative;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.box2 {
+  width: 85vw;
+  background-color: white;
+  border: 4px solid rgb(228, 228, 228);
+  padding: 20px;
+  margin: auto;
+  padding-top: 20px;
+  margin-top: 30px;
+  align-items: center;
+}
+
+h1 {
+  font-size: 33px;
+  font-family: 'Arial', sans-serif;
+  color: white;
+  margin: 0;
+}
+
+h2 {
+  font-size: 20px;
+  font-family: 'Arial', sans-serif;
+  color: black;
+}
 
 
-        body{
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            justify-content: center;
-            align-items: center; 
-        }
-        .title_box{
-            background-color: #ff5c04;
-            height: 100px;
-            width: 100vw;
-            padding: 0;
-            margin: 0;
-            position: relative; 
-            align-items: center;
-            display: flex;
-        }
 
-        .box1 {
-            width: 70vw; 
-            background-color: white; 
-            border: 4px solid rgb(228, 228, 228); 
-            padding: 20px; 
-            margin: auto;
-            display: flex;
-            padding-top: 20px;
-            margin-top: 30px;
-            position: relative; 
-            align-items: center;
-            justify-content: space-between;
-        }
+.button {
+  background-color: #ff5c04;
+  color: black !important;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
 
-        .box2 {
-          width: 70vw; 
-          background-color: white; 
-          border: 4px solid rgb(228, 228, 228); 
-          padding: 20px; 
-          margin: auto;
-          padding-top: 20px;
-          margin-top: 30px;
-          align-items: center;
-      }
+.button:hover {
+  background-color: #e04e03;
+  color: white !important;
+}
 
-        h1{
-          font-size: 33px;
-          font-family: 'Arial', sans-serif;
-          color: white;
-          margin: 0;
-        }
 
-        h2{
-            font-size: 20px;
-            font-family: 'Arial', sans-serif;
-            color: black;  
-        }
+img {
+  width: 25px;
+  height: auto;
+}
 
-        
+.image {
+  text-align: center;
+}
 
-        .button {
-            background-color: #ff5c04;
-            color: white; 
-            border: none; 
-            border-radius: 5px; 
-            padding: 10px 20px; 
-            font-size: 16px; 
-            cursor: pointer; 
-            transition: background-color 0.3s; 
-        }
+.button_1 {
+  cursor: pointer;
+}
 
-        .button:hover {
-            background-color: #e04e03; 
-        }
-        
-        
-        img {
-            width: 25px; 
-            height: auto;
-        }
 
-        .image{
-            text-align: center;
-        }
-
-        .button_1{ 
-            cursor: pointer; 
-        }
-
-        
 .modal {
-    display: block; 
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); 
-    overflow: auto;
-  }
-  
+  display: block;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow: auto;
+}
 
-  .modal-content {
-    background-color: #fff;
-    margin: 15% auto; 
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 600px; 
-    overflow-y: auto;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
-    border-radius: 10px; 
 
-  }
-
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
-  
-  .close:hover, .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-  .centered-div {
-    text-align: center;
-  }
-
-  .text_box{
-    font-size: 16px;
-    height: 30px;
-    width: 99%;
-    margin-bottom: 20px;
-  }
-
-  .modal_title{
-    font-size: 30px;
-    font-family: 'Arial', sans-serif;
-    color: black;
-  }
-
-  .modal_subtitle{
-    font-size: 17px;
-    font-family: 'Arial', sans-serif;
-    color: black;
-  }
-
-  .option_box{
-        font-size: 16px;
-        height: 40px;
-        width: 70%;
-  }
-
-  .integrantes{
-    font-size: 16px;
-    height: 30px;
-    width: 60%;
-    margin-right: 10px;
-    margin-bottom: 20px;
-
-      
-  }
-
-  .div_integrantes{
-    justify-content:space-between;
-  }
-
-  .button_integrante {
-    background-color: #ff5c04;
-    color: white; 
-    border: none; 
-    border-radius: 5px; 
-    padding: 10px 20px; 
-    font-size: 13px; 
-    cursor: pointer; 
-    transition: background-color 0.3s; 
-    margin-right: 10px;
-    width: 15%
+.modal-content {
+  background-color: #fff;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px;
+  overflow-y: auto;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
 
 }
 
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.centered-div {
+  text-align: center;
+}
+
+.text_box {
+  font-size: 16px;
+  height: 30px;
+  width: 99%;
+  margin-bottom: 20px;
+}
+
+.modal_title {
+  font-size: 30px;
+  font-family: 'Arial', sans-serif;
+  color: black;
+}
+
+.modal_subtitle {
+  font-size: 17px;
+  font-family: 'Arial', sans-serif;
+  color: black;
+}
+
+.option_box {
+  font-size: 16px;
+  height: 40px;
+  width: 70%;
+}
+
+.integrantes {
+  font-size: 16px;
+  height: 30px;
+  width: 60%;
+  margin-right: 10px;
+  margin-bottom: 20px;
+
+
+}
+
+.div_integrantes {
+  justify-content: space-between;
+}
+
+.button_integrante {
+  background-color: #ff5c04;
+  color: black !important;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-right: 10px;
+  width: 15%
+}
+
 .button_integrante:hover {
-    background-color: #e04e03; 
+  background-color: #e04e03;
+  color: white !important;
 }
 
 .button_insertar_modal {
   background-color: #ff5c04;
-  color: white; 
-  border: none; 
-  border-radius: 5px; 
-  padding: 10px 20px; 
-  font-size: 16px; 
-  cursor: pointer; 
-  transition: background-color 0.3s; 
+  color: black !important;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
   margin-top: 25px;
 }
 
 .button_insertar_modal:hover {
-  background-color: #e04e03; 
+  background-color: #e04e03;
+  color: white !important;
 }
 
-.filter_text{
+.filter_text {
   font-size: 17px;
   font-family: 'Arial', sans-serif;
   color: black;
@@ -215,11 +217,11 @@
 .estatus {
   display: flex;
   align-items: center;
-  margin-bottom: 5px; 
+  margin-bottom: 5px;
   justify-content: center;
 }
 
-.option_box2{
+.option_box2 {
   font-size: 16px;
   height: 40px;
   width: 100%;
@@ -227,24 +229,24 @@
 
 }
 
-h3{
+h3 {
   font-size: 20px;
   font-family: 'Arial', sans-serif;
-  color: black;  
+  color: black;
   margin-right: 20px;
-        }
+}
 
 .cancel-icon {
   color: black;
   cursor: pointer;
-  font-size:25px;
+  font-size: 25px;
 }
 
 .title_icon {
   color: white;
-  font-size: 25px; 
-  margin-right: 15px; 
-  vertical-align: middle; 
+  font-size: 25px;
+  margin-right: 15px;
+  vertical-align: middle;
   margin-left: 15px;
 }
 
@@ -252,7 +254,16 @@ mat-form-field {
   width: 100%;
 }
 
-.integrantes_form{
+.integrantes_form {
   width: 60%;
   margin-right: 10px;
+}
+
+th {
+  background-color: #ff5c04 !important;
+  color: white !important;
+}
+
+.just_text{
+  height: 175px;
 }
