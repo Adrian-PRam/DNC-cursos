@@ -16,9 +16,10 @@ export class CatalogosService extends ServicioBaseService {
       const params = {
          servicio: 'consulta',
          accion: 'Catalogos_TipoDNC',
+         tipoRespuesta: 'json',
       };
 
-      return this.consulta({ ...params, extras });
+      return this.consulta({ ...params, ...extras });
    }
 
    /**

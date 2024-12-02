@@ -20,17 +20,7 @@
       </div>
       
       <div class="box2">
-        <div class="estatus">
-          <h3>ESTATUS:</h3>
-          <mat-form-field appearance="fill">
-            <mat-label>Selecciona estatus</mat-label>
-            <mat-select [(value)]="selectedEstatus">
-              <mat-option value="todos">Todos</mat-option>
-              <mat-option value="rechazados">Rechazados</mat-option>
-              <mat-option value="aprobados">Aprobados</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+        
       
         <div class="estatus">
           <h3>TIPO:</h3>
@@ -89,7 +79,7 @@
                 <td mat-cell *matCellDef="let entry"> {{ entry.costo | currency:'MXN'}} </td>
               </ng-container>
               <ng-container matColumnDef="rechazar">
-                <th mat-header-cell *matHeaderCellDef> Rechazar </th>
+                <th mat-header-cell *matHeaderCellDef> Cancelar peticion </th>
                 <td mat-cell *matCellDef="let entry">
                   <button mat-icon-button aria-label="Botón para remover un curso de la tabla." (click)="removeEntry(entry)">
                     <mat-icon>delete</mat-icon>
@@ -132,7 +122,7 @@
                 
                 <mat-select [(ngModel)]="tipo" name="tipo" required>
                   @for (tipo of catalogosTipo; track tipo.idTipoRegistro) {
-                    <mat-option [value]="tipo.TipoRegistro">{{tipo.TipoRegistro}}</mat-option>
+                    <mat-option [value]="tipo.idTipoRegistro">{{tipo.TipoRegistro}}</mat-option>
                   }
                 </mat-select>
               </mat-form-field>
@@ -149,7 +139,7 @@
       
               <p class="modal_subtitle">Fecha:</p>
               <mat-form-field>
-                <mat-label>Escoge una fecha</mat-label>
+                <mat-label>Fecha del curso/viaje</mat-label>
                 <input matInput [matDatepicker]="picker" [(ngModel)]="fecha" name="fecha" required>
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>

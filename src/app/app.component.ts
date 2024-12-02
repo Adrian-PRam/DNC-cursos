@@ -1,5 +1,4 @@
-import { Component, ViewChild, AfterViewInit, ChangeDetectionStrategy, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, ViewChild, AfterViewInit, ChangeDetectionStrategy, inject, OnInit,  ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -21,13 +20,13 @@ import {MatButtonModule} from '@angular/material/button';
 import { CatalogosService } from './shared/services/catalogos.service';
 import { CatalogoTipo } from './shared/models/catalogo-tipo.model';
 import { CatalogoNecesidad } from './shared/models/catalogo-necesidad.model';
+import { RegistroService } from './shared/services/registro-alta.service'; 
 
 @Component({
   selector: 'app-root',
   standalone: true,
   providers: [provideNativeDateAdapter()],
   imports: [
-    RouterOutlet,
     MatInputModule,
     FormsModule,
     MatIconModule,
@@ -52,10 +51,11 @@ import { CatalogoNecesidad } from './shared/models/catalogo-necesidad.model';
 
 
 
-export class AppComponent implements AfterViewInit{
+export class AppComponent implements AfterViewInit, OnInit{
 
   //injects
   #catalogosService = inject(CatalogosService);
+  registrosService = inject(RegistroService);
 
   title: string = 'mi-primer-proyecto';
   selectedEstatus: string = 'todos';
@@ -64,6 +64,8 @@ export class AppComponent implements AfterViewInit{
 
   displayedColumns: string[] = ['nombre', 'justificacion', 'tipo', 'integrantes', 'fecha','duracion', 'costo', 'rechazar'];
   dataSource = new MatTableDataSource<any>([]);
+
+  constructor(private cdr: ChangeDetectorRef) {}
 
 
   //
@@ -74,11 +76,11 @@ export class AppComponent implements AfterViewInit{
 
   nombre: string = '';
   justificacion: string = '';
-  tipo: string = '';
+  tipo: number | null = null;
   integrante: string = '';
   fecha: Date | null = null;
-  duracion: string = '';
-  costo: string = '';
+  duracion: number | null = null;
+  costo: number | null = null;
 
   integrantesList: string[] = [];
 
@@ -119,28 +121,62 @@ export class AppComponent implements AfterViewInit{
   onSubmit(dataForm: any): void {
     if (this.duracion && this.nombre && this.justificacion && this.tipo && this.integrantesList.length > 0 && this.fecha && this.costo) {
       const newEntry = {
-        nombre: this.nombre,
+        idTipoRegistro: this.tipo,
         justificacion: this.justificacion,
-        tipo: this.tipo,
-        integrantes: [...this.integrantesList], 
+        nombreDNC: this.nombre,
+
+        integrantes: [...this.integrantesList].length, 
         showIntegrantes: false, 
-        fecha: this.fecha,
+        fechaHoraDNC: new Intl.DateTimeFormat(
+          'sv-SE',
+          {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            hour12: false,
+            timeZone: 'America/Monterrey',
+          })
+            .format(this.fecha)
+            .replace(' ', 'T'),
         duracion: this.duracion,
         costo: this.costo,
       };
 
+      this.registrosService.registradosAlta(newEntry).subscribe({next:(respuesta)=>{
+        
+        if (+respuesta[0].error===0){
+          //Falta recargar la tabla con la API
+          
+          this.nombre = '';
+          this.justificacion = '';
+          this.tipo = null;
+          this.integrantesList = [];
+          this.fecha = null;
+          this.duracion = null;
+          this.costo = null;
+          this.closeModal();
+          this.isModalOpen = false;
+          console.log("condicion cumplida!")
+          this.cdr.detectChanges();
+          
+        }
 
+        else{
+          alert(respuesta[0].mensaje);
+          console.log("else activado")
+        }
+      }});
+
+      /*
       const currentData = this.dataSource.data;
       this.dataSource.data = [...currentData, newEntry];
+      */
 
-      this.nombre = '';
-      this.justificacion = '';
-      this.tipo = '';
-      this.integrantesList = [];
-      this.fecha = null;
-      this.duracion = '';
-      this.costo = '';
-      this.closeModal();
+
+      
     }
   }
 

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ServicioBaseService } from './servicio-base.service';
 import { Observable } from 'rxjs';
+import { ParametrosEditar } from '../models/registrados-editar.model';
+import { ParametrosAlta } from '../models/registrados-alta.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,42 +19,26 @@ export class RegistroService extends ServicioBaseService {
    * @param duracion
    * @returns Observable con la respuesta del alta
    */
-  registradosAlta(idTipoRegistro: number, justificacion: string, nombreDNC: string, fechaHoraDNC: Date, costo: number, duracion: string): Observable<any> {
+  registradosAlta(extras: ParametrosAlta): Observable<any> {
     const params = {
       accion: 'Registrados_Alta',
-      idTipoRegistro: idTipoRegistro.toString(),
-      justificacion: justificacion,
-      nombreDNC: nombreDNC,
-      fechaHoraDNC: fechaHoraDNC.toISOString(),
-      costo: costo.toString(),
-      duracion: duracion
+      servicio: 'alta',
+      tipoRespuesta: 'json',
     };
-    return this.consulta(params, 'alta');
+    return this.consulta({...params, ...extras});
   }
 
   /**
    * Servicio para editar un registro existente
-   * @param idDNC
-   * @param idTipoRegistro
-   * @param justificacion
-   * @param nombreDNC
-   * @param fechaHoraDNC
-   * @param costo
-   * @param duracion
    * @returns Observable con la respuesta de la edición
    */
-  registradosEditar(idDNC: number, idTipoRegistro: number, justificacion: string, nombreDNC: string, fechaHoraDNC: Date, costo: number, duracion: string): Observable<any> {
+  registradosEditar(extras: ParametrosEditar): Observable<any> {
     const params = {
       accion: 'Registrados_Editar',
-      idDNC: idDNC.toString(),
-      idTipoRegistro: idTipoRegistro.toString(),
-      justificacion: justificacion,
-      nombreDNC: nombreDNC,
-      fechaHoraDNC: fechaHoraDNC.toISOString(),
-      costo: costo.toString(),
-      duracion: duracion
+      servicio: 'alta',
+      tipoRespuesta: 'json',
     };
-    return this.consulta(params, 'alta');
+    return this.consulta({...params, ...extras});
   }
 
   /**
