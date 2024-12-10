@@ -48,9 +48,11 @@ export class RegistroService extends ServicioBaseService {
    */
   registradosEliminar(idDNC: number): Observable<any> {
     const params = {
+      servicio: 'alta',
       accion: 'Registrados_Eliminar',
-      idDNC: idDNC.toString()
+      tipoRespuesta: 'json',
+      idDNC: idDNC
     };
-    return this.consulta(params, 'alta');
+    return this.consulta(params);
   }
 }

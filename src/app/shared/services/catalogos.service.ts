@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ServicioBaseService } from './servicio-base.service';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
+import { ListaRegistros } from '../models/lista-registros.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,14 +13,14 @@ export class CatalogosService extends ServicioBaseService {
    * @returns Un arreglo con los catálogos.
    * @params extras - parámetros a enviar a la petición.
    */
-   public Catalogos_TipoDNC(extras: Object): Observable<any[]> {
+   public Catalogos_TipoDNC(): Observable<any[]> {
       const params = {
          servicio: 'consulta',
          accion: 'Catalogos_TipoDNC',
          tipoRespuesta: 'json',
       };
 
-      return this.consulta({ ...params, ...extras });
+      return this.consulta( params );
    }
 
    /**
@@ -27,13 +28,14 @@ export class CatalogosService extends ServicioBaseService {
    * @returns Un arreglo con los catálogos.
    * @params extras - parámetros a enviar a la petición.
    */
-   public Catalogos_NecesidadDNC(extras: Object): Observable<any[]> {
+   public Catalogos_Necesidades(extras: Object): Observable<any[]> {
       const params = {
          servicio: 'consulta',
          accion: 'Catalogos_Necesidades',
+         tipoRespuesta: 'json',
       };
 
-      return this.consulta({ ...params, extras });
+      return this.consulta({ ...params, ...extras });
    }
 
    /**
@@ -79,5 +81,21 @@ export class CatalogosService extends ServicioBaseService {
   };
 
   return this.consulta(params);
+
+}
+
+/**
+   * Obtiene el catalogo de tipos DNC
+   * @returns Un arreglo con los catálogos.
+   * @params extras - parámetros a enviar a la petición.
+   */
+public Lista_Registros(extras: Object): Observable<any[]> {
+   const params = {
+      servicio: 'consulta',
+      accion: 'Lista_Registros',
+      tipoRespuesta: 'json',
+   };
+
+   return this.consulta({ ...params, ...extras }).pipe(map((registros)=>{return registros.map((registro: ListaRegistros)=>{registro.idDNC = +registro.idDNC; registro.fechaHoraDNC= registro.fechaHoraDNC.replace(' ','T'); return registro;});}));
 }
 }

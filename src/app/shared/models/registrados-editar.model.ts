@@ -6,4 +6,6 @@ export interface ParametrosEditar {
     fechaHoraDNC: Date;
     costo: number;
     duracion: number;
+    Integrantes: number;
+    idNecesidades: string;
 }

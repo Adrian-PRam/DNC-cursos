@@ -1,167 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
+
 <body>
 
 
 
-    <div class="title_box">
-        <mat-icon class="title_icon">calendar_today</mat-icon>
-        <h1>DNC Cursos</h1>
-      </div>
-      
-      <div class="box1">
-        <h2>Cursos Registrados</h2>
-        <button class="button" mat-raised-button (click)="openModal()">AGREGAR</button>
-      </div>
-      
-      <div class="box2">
-        
-      
-        <div class="estatus">
-          <h3>TIPO:</h3>
-          <mat-form-field appearance="fill">
-            <mat-label>Selecciona tipo</mat-label>
-            <mat-select [(value)]="selectedTipo">
-              @for (tipo of catalogosTipo; track tipo.idTipoRegistro) {
-                <mat-option [value]="tipo.idTipoRegistro">{{tipo.TipoRegistro}}</mat-option>
-              }
-            </mat-select>
+  <div class="title_box">
+    <mat-icon class="title_icon">calendar_today</mat-icon>
+    <h1>DNC Cursos</h1>
+  </div>
+
+  <div class="box1">
+    <h2>Cursos Registrados</h2>
+    <button class="button" mat-raised-button (click)="openModal()">AGREGAR</button>
+
+
+  </div>
+
+  <div class="box2">
+
+
+    <div class="estatus">
+      <h3>TIPO:</h3>
+      <mat-form-field appearance="fill">
+        <mat-label>Selecciona tipo</mat-label>
+        <mat-select [(value)]="selectedTipo">
+          @for (tipo of catalogosTipo; track tipo.idTipoRegistro) {
+          <mat-option [value]="tipo.idTipoRegistro">{{tipo.TipoRegistro}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+
+    </div>
+
+
+
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+          <td mat-cell *matCellDef="let registro"> {{ registro.idDNC }} </td>
+        </ng-container>
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre de Curso </th>
+          <td mat-cell *matCellDef="let registro"> {{ registro.nombreDNC }} </td>
+        </ng-container>
+        <ng-container matColumnDef="tipo">
+          <th mat-header-cell *matHeaderCellDef> Tipo </th>
+          <td mat-cell *matCellDef="let registro"> {{ registro.TipoRegistro }} </td>
+        </ng-container>
+        <ng-container matColumnDef="integrantes">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Num. de Integrantes </th>
+          <td mat-cell *matCellDef="let registro" class="centered-div"> {{ registro.Integrantes }} </td>
+        </ng-container>
+        <ng-container matColumnDef="fecha">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </th>
+          <td mat-cell *matCellDef="let registro"> {{ registro.fechaHoraDNC | date: 'shortDate' }} </td>
+        </ng-container>
+        <ng-container matColumnDef="duracion">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Duracion </th>
+          <td mat-cell *matCellDef="let registro"> {{ registro.duracion }} </td>
+        </ng-container>
+        <ng-container matColumnDef="costo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Costo </th>
+          <td mat-cell *matCellDef="let registro"> {{ registro.costo | currency: 'MXN' }} </td>
+        </ng-container>
+        <ng-container matColumnDef="detalles">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Detalles </th>
+          <td mat-cell *matCellDef="let registro">
+            <button mat-icon-button (click)="openDialog(registro)">
+              <mat-icon>info</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="rechazar">
+          <th mat-header-cell *matHeaderCellDef> Cancelar peticion </th>
+          <td mat-cell *matCellDef="let registro">
+            <button mat-icon-button aria-label="Botón para remover un curso de la tabla."
+              (click)="deleteRegistro(registro.idDNC)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let cursos; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+        aria-label="Selecciona una página de la tabla de cursos registrados.">
+      </mat-paginator>
+    </div>
+
+  </div>
+
+  @if(isModalOpen) {
+  <div class="modal">
+    <div class="modal-content">
+      <span class="close" (click)="closeModal()">&times;</span>
+      <form #dataForm="ngForm" (ngSubmit)="onSubmit(dataForm)">
+
+        <p class="modal_subtitle">Nombre de Curso:</p>
+        <mat-form-field>
+          <mat-label>Ingresa el nombre</mat-label>
+          <input matInput [(ngModel)]="nombre" name="nombre" required>
+        </mat-form-field>
+
+        <p class="modal_subtitle">Justificacion del curso:</p>
+        <mat-form-field class="just_text">
+          <mat-label>Escribe la justificacion</mat-label>
+          <input matInput [(ngModel)]="justificacion" name="justificacion" required>
+        </mat-form-field>
+        <p class="modal_subtitle">Tipo:</p>
+        <mat-form-field appearance="fill">
+          <mat-label>Selecciona tipo</mat-label>
+
+          <mat-select [(ngModel)]="tipo" name="tipo" required>
+            @for (tipo of catalogosTipo; track tipo.idTipoRegistro) {
+            <mat-option [value]="tipo.idTipoRegistro">{{tipo.TipoRegistro}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <div class="div_integrantes">
+          <p class="modal_subtitle">Integrantes:</p>
+          <mat-form-field>
+            <mat-label>Numero de integrantes</mat-label>
+            <input matInput [(ngModel)]="integrante" name="integrante" required>
           </mat-form-field>
-
-          
         </div>
 
-        
-      
-          <div class="mat-elevation-z8">
-            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-              <ng-container matColumnDef="nombre">
-                <th mat-header-cell *matHeaderCellDef> Nombre de Curso </th>
-                <td mat-cell *matCellDef="let entry"> {{ entry.nombre }} </td>
-              </ng-container>
-              <ng-container matColumnDef="justificacion">
-                <th mat-header-cell *matHeaderCellDef> Justificacion </th>
-                <td mat-cell *matCellDef="let entry"> {{ entry.justificacion }} </td>
-              </ng-container>
-              <ng-container matColumnDef="tipo">
-                <th mat-header-cell *matHeaderCellDef> Tipo </th>
-                <td mat-cell *matCellDef="let entry"> {{ entry.tipo }} </td>
-              </ng-container>
-              <ng-container matColumnDef="integrantes">
-                <th mat-header-cell *matHeaderCellDef> Integrantes </th>
-                <td mat-cell *matCellDef="let entry">
-                  {{ entry.integrantes.length }}
-                  <button mat-icon-button (click)="toggleIntegrantes(entry)">
-                    <mat-icon>info</mat-icon>
-                  </button>
-                  <div *ngIf="entry.showIntegrantes" class="integrantes-list">
-                    <ul>
-                      <li *ngFor="let integrante of entry.integrantes">{{ integrante }}</li>
-                    </ul>
-                  </div>
-                </td>
-              </ng-container>              
-              <ng-container matColumnDef="fecha">
-                <th mat-header-cell *matHeaderCellDef> Fecha </th>
-                <td mat-cell *matCellDef="let entry"> {{ entry.fecha  | date:'medium' }} </td>
-              </ng-container>
-              <ng-container matColumnDef="duracion">
-                <th mat-header-cell *matHeaderCellDef> Duracion </th>
-                <td mat-cell *matCellDef="let entry"> {{ entry.duracion }} </td>
-              </ng-container>
-              <ng-container matColumnDef="costo">
-                <th mat-header-cell *matHeaderCellDef> Costo </th>
-                <td mat-cell *matCellDef="let entry"> {{ entry.costo | currency:'MXN'}} </td>
-              </ng-container>
-              <ng-container matColumnDef="rechazar">
-                <th mat-header-cell *matHeaderCellDef> Cancelar peticion </th>
-                <td mat-cell *matCellDef="let entry">
-                  <button mat-icon-button aria-label="Botón para remover un curso de la tabla." (click)="removeEntry(entry)">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </td>
-              </ng-container>
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let entry; columns: displayedColumns;"></tr>
-            </table>
-            
-            <mat-paginator
-              [pageSizeOptions]="[5, 10, 20]"
-              showFirstLastButtons
-              aria-label="Selecciona una página de la tabla de cursos registrados.">
-            </mat-paginator>
-          </div>
-          
-      </div>
-      
-      @if(isModalOpen) {
-        <div class="modal">
-          <div class="modal-content">
-            <span class="close" (click)="closeModal()">&times;</span>
-            <form #dataForm="ngForm" (ngSubmit)="onSubmit(dataForm)">
+        <p class="modal_subtitle">Fecha:</p>
+        <mat-form-field>
+          <mat-label>Fecha del curso/viaje</mat-label>
+          <input matInput [matDatepicker]="picker" [(ngModel)]="fecha" name="fecha" required>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
 
-              <p class="modal_subtitle">Nombre de Curso:</p>
-                <mat-form-field>
-                  <mat-label>Ingresa el nombre</mat-label>
-                  <input matInput [(ngModel)]="nombre" name="nombre" required>
-                </mat-form-field>
+        <p class="modal_subtitle">Duracion:</p>
+        <mat-form-field>
+          <mat-label>Ingresa la duracion</mat-label>
+          <input matInput [(ngModel)]="duracion" name="duracion" required>
+        </mat-form-field>
 
-                <p class="modal_subtitle">Justificacion del curso:</p>
-                <mat-form-field class="just_text">
-                  <mat-label>Escribe la justificacion</mat-label>
-                  <input matInput [(ngModel)]="justificacion" name="justificacion" required>
-                </mat-form-field>
-              <p class="modal_subtitle">Tipo:</p>
-              <mat-form-field appearance="fill">
-                <mat-label>Selecciona tipo</mat-label>
-                
-                <mat-select [(ngModel)]="tipo" name="tipo" required>
-                  @for (tipo of catalogosTipo; track tipo.idTipoRegistro) {
-                    <mat-option [value]="tipo.idTipoRegistro">{{tipo.TipoRegistro}}</mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-      
-              <div class="div_integrantes">
-                <p class="modal_subtitle">Integrantes:</p>
-                <mat-form-field class="integrantes_form">
-                    <mat-label>Ingresa los integrantes</mat-label>
-                    <input matInput [(ngModel)]="integrante" name="integrante" required>
-                  </mat-form-field>
-                <button class="button_integrante" type="button" mat-raised-button (click)="agregarIntegrante()">AGREGAR</button>
-                <button class="button_integrante" type="button" mat-raised-button (click)="quitarIntegrante()">QUITAR</button>
-              </div>
-      
-              <p class="modal_subtitle">Fecha:</p>
-              <mat-form-field>
-                <mat-label>Fecha del curso/viaje</mat-label>
-                <input matInput [matDatepicker]="picker" [(ngModel)]="fecha" name="fecha" required>
-                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-              </mat-form-field>
+        <p class="modal_subtitle">Costo:</p>
+        <mat-form-field>
+          <mat-label>Ingresa el costo</mat-label>
+          <input matInput [(ngModel)]="costo" name="costo" required>
+        </mat-form-field>
 
-              <p class="modal_subtitle">Duracion:</p>
-                <mat-form-field>
-                  <mat-label>Ingresa la duracion</mat-label>
-                  <input matInput [(ngModel)]="duracion" name="duracion" required>
-                </mat-form-field>
-              
-              <p class="modal_subtitle">Costo:</p>
-              <mat-form-field>
-                <mat-label>Ingresa el costo</mat-label>
-                <input matInput  [(ngModel)]="costo" name="costo" required>
-              </mat-form-field>
-      
-              <div class="centered-div">
-                <button type="submit" mat-raised-button class="button_insertar_modal">GUARDAR</button>
-              </div>
-            </form>
-          </div>
+        <p class="modal_subtitle">Origen de la necesidad:</p>
+        <section>
+          @for (nec of catalogosNecesidad; track nec.idNecesidad){
+          <p><mat-checkbox (change)="onCheckboxChange($event, nec)">{{nec.necesidad}}</mat-checkbox></p>
+          }
+        </section>
+
+        <div class="centered-div">
+          <button type="submit" mat-raised-button class="button_insertar_modal">GUARDAR</button>
         </div>
-      }
-      
+
+      </form>
+    </div>
+  </div>
+  }

@@ -5,4 +5,6 @@ export interface ParametrosAlta {
     fechaHoraDNC: string;
     costo: number;
     duracion: number;
+    idsNecesidades: string;
+    Integrantes: number;
 }

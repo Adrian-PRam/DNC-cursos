@@ -1,4 +1,4 @@
 export interface CatalogoNecesidad {
-    NecesidadRegistro: string;
-    idNecesidadRegistro: number;
+    idNecesidad: number;
+    necesidad: string;
 }
