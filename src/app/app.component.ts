@@ -2,7 +2,7 @@ import { Component, ViewChild, AfterViewInit, ChangeDetectionStrategy, inject, O
 import { FormBuilder, FormsModule, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableDataSource } from '@angular/material/table';
@@ -31,6 +31,7 @@ import { RegistroService } from './shared/services/registro-alta.service';
 import { ListaRegistros } from './shared/models/lista-registros.model';
 import { ParametrosEliminar } from './shared/models/registrados-eliminar.model';
 import { DialogoMuestraDetallesComponent } from './dialogo-muestra-detalles/dialogo-muestra-detalles.component';
+import { DialogoDeleteComponent } from './dialogo-delete/dialogo-delete.component';
 
 
 @Component({
@@ -78,11 +79,10 @@ export class AppComponent implements  OnInit {
   registrosService = inject(RegistroService);
 
   title: string = 'mi-primer-proyecto';
-  selectedEstatus: string = 'todos';
   selectedTipo: string = 'Todos';
   isModalOpen: boolean = false;
 
-  displayedColumns: string[] = ['id', 'nombre', 'tipo', 'integrantes', 'fecha', 'duracion', 'costo', 'detalles', 'rechazar'];
+  displayedColumns: string[] = ['idDNC', 'nombreDNC', 'TipoRegistro', 'Integrantes', 'fechaHoraDNC', 'duracion', 'costo', 'detalles', 'rechazar'];
   dataSource = new MatTableDataSource<ListaRegistros>([]);
 
   constructor(private cdr: ChangeDetectorRef, private fb: FormBuilder) { }
@@ -101,6 +101,25 @@ export class AppComponent implements  OnInit {
   @ViewChild(MatPaginator, {static: false}) set paginadorTabla(paginador: MatPaginator) {if (this.dataSource){ this.dataSource.paginator = paginador;}}
 
 
+  applyFilter(event: MatSelectChange): void {
+    const filterValue = event.value || 'todos'; 
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+  
+  
+  
+/*
+  filteredData = this.dataSource;
+  filterTable(){
+    if (!this.selectedTipo){
+      this.filteredData = this.dataSource;
+    } else{
+      this.filteredData = this.dataSource.filter(item =>
+        item.TipoRegistro === this.selectedTipo
+      )
+    }
+  }
+  */
 
   nombre: string = '';
   justificacion: string = '';
@@ -115,6 +134,14 @@ export class AppComponent implements  OnInit {
   openDialog(registro: ListaRegistros) {
     this.dialog.open(DialogoMuestraDetallesComponent, { data: registro });
   }
+
+  openDialogDelete(registro: ListaRegistros) {
+    const dialogRef = this.dialog.open(DialogoDeleteComponent, { data: registro });
+    dialogRef.componentInstance.deleteConfirmed.subscribe(() => {
+      this.ContenidoDeLaTabla();
+    });
+  }
+
 
 
 
@@ -138,6 +165,7 @@ export class AppComponent implements  OnInit {
   ngOnInit(): void {
     this.obtenerCatalogo();
     this.ContenidoDeLaTabla();
+    /*
     this.dataSource.sortingDataAccessor = (data: any, col)=>{
       if(col=='id'){
         return data.idDNC;
@@ -146,6 +174,12 @@ export class AppComponent implements  OnInit {
         return data[col];
       }
     }
+      */
+    this.dataSource.filterPredicate = (data: ListaRegistros, filter: string): boolean => {
+      const filterValue = filter.trim().toLowerCase();
+      const tipoRegistro = (data.TipoRegistro || '').trim().toLowerCase();
+      return filterValue === 'todos' || tipoRegistro === filterValue;
+    };
   }
 
 
@@ -276,7 +310,9 @@ export class AppComponent implements  OnInit {
       next: (response) => {
         if (response) {
           this.dataSource.data = response;
-          console.log("lista registros", response)
+          console.log("lista registros", response);
+          this.dataSource.filter = this.selectedTipo.trim().toLowerCase();
+          this.cdr.detectChanges();
         }
       },
       error: (error) => {
@@ -305,6 +341,13 @@ export class AppComponent implements  OnInit {
       }
     });
   }
+
+  
+  
+
+  
+
+  
 
 
 
